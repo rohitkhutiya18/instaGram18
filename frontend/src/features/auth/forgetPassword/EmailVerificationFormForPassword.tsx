@@ -37,6 +37,7 @@ const EmailVerificationFormForPassword = () => {
         const email = data.email;
 
         await requestOTPForgetPassword(email).unwrap();
+           toast.success("check your email")
         setShowOtpInputBox(true);
         return;
       }

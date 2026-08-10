@@ -9,8 +9,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import Input from "../../../../component/ui/input/Input";
 import Button from "../../../../component/ui/button/Button";
+import toast from "react-hot-toast";
 
-const EmailVerificationForm = () => {
+const   EmailVerificationForm = () => {
   const [
     requestOTP,
     { isLoading: requestingOTP },
@@ -33,6 +34,7 @@ const EmailVerificationForm = () => {
       if (data.email && !data.otp) {
           const email = data.email
          await requestOTP({email}).unwrap();
+         toast.success("check your email")
         setShowOtpInputBox(true);
       }
 

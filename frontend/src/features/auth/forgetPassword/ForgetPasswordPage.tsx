@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import PasswordField from "../../../component/ui/input/PasswordInput";
 import Button from "../../../component/ui/button/Button";
 import { useResetPasswordMutation } from "../services/forgetPassword.feature";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 const ForgetPasswordPage = () => {
   const location = useLocation();

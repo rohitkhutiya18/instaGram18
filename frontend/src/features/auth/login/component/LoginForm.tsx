@@ -11,6 +11,7 @@ import PasswordField from "../../../../component/ui/input/PasswordInput";
 import Button from "../../../../component/ui/button/Button";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../../../store/slice/userSlice";
+import toast from "react-hot-toast";
 
 const LoginForm = () => {
   const location = useLocation();
@@ -42,6 +43,9 @@ const LoginForm = () => {
       dispatch(setUserData(res));
       navigate("/");
     } catch (error) {
+      const err = error as {data:{message:{message:string}}}
+      const errMessage = err.data.message.message || "something went wrong"
+      toast.error(errMessage)
       console.log("there is an error in the loginForm", error);
     }
   };

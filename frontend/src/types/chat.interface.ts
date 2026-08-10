@@ -10,7 +10,7 @@ export interface chatInterface {
   createdAt: string;
   id: string;
   message: string;
-  sender:string
+  sender:{id:string}
   conversactionId:string;
 }
 

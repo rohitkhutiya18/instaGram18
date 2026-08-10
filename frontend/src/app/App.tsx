@@ -1,11 +1,11 @@
 import { RouterProvider } from "react-router-dom"
 import { router } from "./router"
 import '../style/App.css'
-import { ToastContainer } from "react-toastify"
+import { Toaster } from "react-hot-toast";
 const App = () => {
   return (
     <div>
-      <ToastContainer/>
+      <Toaster/>
       <RouterProvider router={router} />
     </div>
   )
