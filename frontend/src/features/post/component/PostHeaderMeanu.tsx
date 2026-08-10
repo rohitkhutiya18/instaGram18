@@ -13,22 +13,6 @@ const PostHeaderMeanu = ({updatePost,postCreatorId,deletePost}:prop) => {
     const userData =JSON.parse(window.localStorage.getItem('userData') || '{}')
 
 
-//     const menuRef = useRef(null);
-
-// useEffect(() => {
-//   const handleClickOutside = (e) => {
-//     if (menuRef.current && !menuRef.current.contains(e.target)) {
-//       setShowOptions(false);
-//     }
-//   };
-
-//   document.addEventListener("mousedown", handleClickOutside);
-
-//   return () => {
-//     document.removeEventListener("mousedown", handleClickOutside);
-//   };
-// }, []);
-
   return (
     <div>
         <div className="relative">

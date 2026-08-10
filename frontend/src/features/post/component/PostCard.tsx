@@ -5,7 +5,7 @@ import PostActions from "./PostActions";
 import PostCardCaption from "./PostCardCaption";
 import PostCardHeader from "./PostCardHeader";
 import { useDeletePostMutation } from "../services/postApi";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useState } from "react";
 import CommentModal from "../../comment/CommentModal";
 import { handleDate } from "../../../customFunction/handleData";

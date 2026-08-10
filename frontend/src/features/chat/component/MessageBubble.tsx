@@ -11,7 +11,7 @@ interface props {
 const MessageBubble = ({chatHistory,setChatHistory}:props) => {
 
   const myId = JSON.parse(window.localStorage.getItem('userData') || '{}')
-
+  console.log(chatHistory)
   useEffect(() => {
    
     socket.on('newMessage',(payload)=>{
@@ -39,7 +39,7 @@ const MessageBubble = ({chatHistory,setChatHistory}:props) => {
   >
     <div
       className={`max-w-md rounded-3xl px-5 py-3 ${
-        msg?.sender === myId.userId
+        msg?.sender?.id === myId.userId
         ? "bg-gradient-to-r from-[#f3b8b4] to-[#f9d8d6]"
         : "bg-white"
       }`}

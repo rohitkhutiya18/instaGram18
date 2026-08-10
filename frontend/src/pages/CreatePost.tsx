@@ -4,7 +4,7 @@ import Button from "../component/ui/button/Button"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
 import { Upload, X } from "lucide-react"
-import { toast } from "react-toastify"
+import { toast } from "react-hot-toast"
 import type { createPostSchemaType } from "../schema/createPostSchema"
 import { useCreatePostMutation } from "../features/post/services/postApi"
 import { useNavigate } from "react-router-dom"
@@ -29,7 +29,7 @@ const CreatePost = () => {
     const handleImages = (e: React.ChangeEvent<HTMLInputElement>)=>{
       const imgInputArr = Array.from(e.target.files ?? []);
            if(imagesArr.length + imgInputArr.length > 3){
-            return toast.info("you can't add more than 3 images")
+            return toast.error("you can't add more than 3 images")
            }
 
            setImagesArr((prev)=>[...prev,...imgInputArr])
@@ -43,6 +43,9 @@ const CreatePost = () => {
     }
 
     const onSubmit = async (data:createPostSchemaType)=>{
+      if(imagesArr.length === 0){ 
+          return  toast.error("minimun one image is required post create ")
+           }
         try {
           const formData = new FormData();
           formData.append("caption",data.caption);

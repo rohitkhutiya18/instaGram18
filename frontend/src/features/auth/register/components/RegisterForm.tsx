@@ -6,7 +6,7 @@ import {
 } from "../../../../schema/registerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router-dom";
-import { Bounce, toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import Input from "../../../../component/ui/input/Input";
 import Button from "../../../../component/ui/button/Button";
 import { useState } from "react";
@@ -53,12 +53,7 @@ const RegisterForm = ({email}:{email:string}) => {
       console.log("there is an error in the register from ", err.data.message);
 
       if (err.data.statusCode == 406) {
-         toast.info("This email is already registered", {
-        position: "top-left",
-        autoClose: 5000,
-        theme: "light",
-        transition: Bounce,
-      });
+         toast.error("This email is already registered");
         navigate("/login", {
           state: { email: data.email, password: data.password },
         });

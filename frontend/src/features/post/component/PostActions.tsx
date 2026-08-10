@@ -1,6 +1,6 @@
-import { Bookmark, Heart, MessageCircle } from "lucide-react";
+import { Heart, MessageCircle } from "lucide-react";
 import { useLikeOrUnlikePostMutation } from "../services/postApi";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 interface prop {
@@ -23,7 +23,7 @@ const PostActions = ({ postActionProp }: prop) => {
   const handleLikeOrUnLike = async (postId: string) => {
     try {
       if (!token) {
-        toast.warning("login first before like any post");
+        toast.error("login first before like any post");
         navigate("/login");
         return;
       }

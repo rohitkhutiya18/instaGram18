@@ -7,7 +7,7 @@ import {
   useUpdateProfilePicMutation,
   useUpdateUserDataMutation,
 } from "../services/user.Api";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import TempUserImage from "../assets/tempUser.jpg";
@@ -17,22 +17,19 @@ const EditProfileForm = () => {
   const [showImageMenu, setShowImageMenu] = useState(false);
   const [requestDeletingProfilePic, { isLoading: deleting }] =
     useDeleteProfilePicMutation();
-  const [requestUpdatingProfilePic] =
-    useUpdateProfilePicMutation();
+  const [requestUpdatingProfilePic] = useUpdateProfilePicMutation();
 
-    const [updateUserData,{isLoading:updatingUser}] = useUpdateUserDataMutation()
+  const [updateUserData, { isLoading: updatingUser }] =
+    useUpdateUserDataMutation();
 
   const [profileImage, setProfileImage] = useState<File | null>(null);
 
   const location = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   console.log(location.state);
 
-  const {
-    register,
-    handleSubmit
-  } = useForm<updateUserSchemaInterface>({
+  const { register, handleSubmit } = useForm<updateUserSchemaInterface>({
     defaultValues: {
       email: location.state?.email || "",
       bio: location.state?.bio || "",
@@ -46,7 +43,7 @@ const EditProfileForm = () => {
       if (public_id == null) {
         return;
       }
-   await requestDeletingProfilePic({ public_id }).unwrap();
+      await requestDeletingProfilePic({ public_id }).unwrap();
       toast.success("profile pic removed successfully");
     } catch (error) {
       console.log(
@@ -61,13 +58,13 @@ const EditProfileForm = () => {
       const file = Array.from(e.target.files || []);
 
       if (file.length === 0) {
-        toast.warning("something went wrong");
+        toast.error("something went wrong");
         return;
       }
 
       setProfileImage(file[0]);
-       
-      console.log(profileImage)
+
+      console.log(profileImage);
       const formData = new FormData();
 
       formData.append("public_id", location.state?.public_id || "");
@@ -79,7 +76,7 @@ const EditProfileForm = () => {
 
       await requestUpdatingProfilePic(formData).unwrap();
       toast.success("image update successfully");
-      navigate('/profile')
+      navigate("/profile");
     } catch (error) {
       console.log("there is an error in the handleupadteImage function", error);
     }
@@ -93,16 +90,15 @@ const EditProfileForm = () => {
       // formData.append("email", data.email);
 
       const updatedData = {
-        bio:data.bio,
-        userName:data.name,
-        email:data.email
-      }
-     
+        bio: data.bio,
+        userName: data.name,
+        email: data.email,
+      };
 
-    const res = await updateUserData(updatedData).unwrap();
-      console.log(res)
+      const res = await updateUserData(updatedData).unwrap();
+      console.log(res);
       // toast.success("profile update successfully")
-      navigate('/profile')
+      navigate("/profile");
     } catch (error) {
       console.log("there is an error in the handle update user profile", error);
     }
@@ -183,13 +179,13 @@ const EditProfileForm = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)}>
-           <div className="mt-10 space-y-6">
-          <div>
-            <Input
-              label="Name"
-              {...register("name")}
-              placeholder="update your name"
-              className="w-full rounded-2xl
+          <div className="mt-10 space-y-6">
+            <div>
+              <Input
+                label="Name"
+                {...register("name")}
+                placeholder="update your name"
+                className="w-full rounded-2xl
           border border-white/40
           bg-white/70
           px-5 py-3
@@ -197,19 +193,19 @@ const EditProfileForm = () => {
           text-[#4f4444]
           placeholder:text-[#8a7775]
           focus:ring-2 focus:ring-[#f3b8b4]"
-            />
-          </div>
+              />
+            </div>
 
-          <div>
-            <Label
-              children="Bio"
-              className="block mb-2 font-medium text-[#4f4444]"
-            />
+            <div>
+              <Label
+                children="Bio"
+                className="block mb-2 font-medium text-[#4f4444]"
+              />
 
-            <textarea
-              {...register("bio")}
-              rows={5}
-              className="w-full rounded-2xl
+              <textarea
+                {...register("bio")}
+                rows={5}
+                className="w-full rounded-2xl
           border border-white/40
           bg-white/70
           px-5 py-3
@@ -218,16 +214,16 @@ const EditProfileForm = () => {
           text-[#4f4444]
           placeholder:text-[#8a7775]
           focus:ring-2 focus:ring-[#f3b8b4]"
-            />
-          </div>
+              />
+            </div>
 
-          <div>
-            <Input
-              {...register("email")}
-              label="Email"
-              disabled
-              placeholder="email"
-              className="w-full rounded-2xl
+            <div>
+              <Input
+                {...register("email")}
+                label="Email"
+                disabled
+                placeholder="email"
+                className="w-full rounded-2xl
           border border-white/40
           bg-white/70
           px-5 py-3
@@ -235,24 +231,24 @@ const EditProfileForm = () => {
           text-[#4f4444]
           placeholder:text-[#8a7775]
           focus:ring-2 focus:ring-[#f3b8b4]"
-            />
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="mt-10 flex justify-end gap-4">
-          <button
-            className="cursor-pointer rounded-2xl border border-white/40
+          <div className="mt-10 flex justify-end gap-4">
+            <button
+              className="cursor-pointer rounded-2xl border border-white/40
         bg-white/50
         px-6 py-3
         text-[#4f4444]
         transition hover:bg-white/70"
-          >
-            Cancel
-          </button>
+            >
+              Cancel
+            </button>
 
-          <button
-          type="submit"
-            className="cursor-pointer rounded-2xl
+            <button
+              type="submit"
+              className="cursor-pointer rounded-2xl
         bg-gradient-to-r
         from-[#f3b8b4]
         to-[#e8a8a3]
@@ -262,12 +258,11 @@ const EditProfileForm = () => {
         shadow-lg
         transition
         hover:scale-95"
-          >
-            {updatingUser ? "Changing..." : "Save Changes"}
-          </button>
-        </div>
+            >
+              {updatingUser ? "Changing..." : "Save Changes"}
+            </button>
+          </div>
         </form>
-       
       </div>
     </div>
   );

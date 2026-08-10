@@ -3,7 +3,7 @@ import Button from '../../../component/ui/button/Button'
 import type { userProfilePic } from '../../../types/Scroll.Feed.Interface'
 import PostHeaderMeanu from './PostHeaderMeanu'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import { toast } from 'react-hot-toast'
 interface prop {
   postCardHeaderProp:{
     userName:string,
@@ -30,9 +30,11 @@ const logdinProfle = JSON.parse(window.localStorage.getItem('userData') || "{}")
     }
         await requestUnFollowing({id}).unwrap();
     } catch (error) {
-      const err = error as {data:{message:{message:string},status:string}}
-      console.log("there is an error in the handfollowuser function",error)
-        toast.warning(`${err.data.message.message}`)
+    const err = error as {data:{message:{message:string}}}
+      const errMessage = err.data.message.message || "something went wrong"
+      toast.error(errMessage)
+      navigate('/login')
+     
     }
   }
 
@@ -72,8 +74,8 @@ const logdinProfle = JSON.parse(window.localStorage.getItem('userData') || "{}")
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Button
+      <div className="flex items-center gap-3">
+         {postCardHeaderProp.postCreaterId != logdinProfle.userId &&   <Button
           onClick={()=>{handleFollowUser(postCardHeaderProp.postCreaterId)}}
           className={`rounded-full px-4 py-2 text-sm font-medium cursor-pointer text-white transition-all 
              duration-200 ${
@@ -82,7 +84,7 @@ const logdinProfle = JSON.parse(window.localStorage.getItem('userData') || "{}")
       : "bg-bg-[var(--text-secondary)]"
   }`}
    children= {postCardHeaderProp.isFollowed ? "followed" : 'follow'}
-  />
+  />}
            
           
 
