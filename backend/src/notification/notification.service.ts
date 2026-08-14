@@ -29,7 +29,7 @@ export class NotificationService {
                 subject:'notification from insta',
                 html:html
             })
-            console.log(info)
+           
          return info;
           } catch (error) {
             throw new InternalServerErrorException("notification not send")

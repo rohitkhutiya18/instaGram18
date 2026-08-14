@@ -65,7 +65,7 @@ export class ChatService {
     .leftJoinAndSelect('conversation.chats','chats')
     .leftJoinAndSelect('chats.sender','sender')
     .where(`user1.id=:id OR user2.id=:id`,{id})
-    .orderBy('conversation.lastMessageTime','DESC')
+    .orderBy('conversation.lastMessageTime','ASC')
     .getMany()
 
     return conversationList.map((val)=>{

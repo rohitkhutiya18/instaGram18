@@ -60,14 +60,19 @@ export class AuthService {
       sameSite: 'lax', //if frontend/backend in differnt domain,
       maxAge: 7 * 60 * 60 * 24 * 24,
     });
-
+console.log(    user.id,
+       user.userName,
+       user.email,
+       user.refreshToken,
+       user.profilePic,
+      accessToken)
     return {
-      id: user.id,
+       id:user.id,
       name: user.userName,
       email: user.email,
       refreshToken: user.refreshToken,
       url: user.profilePic,
-      accessToken,
+      accessToken
     };
   }
 
