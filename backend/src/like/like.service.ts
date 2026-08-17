@@ -20,7 +20,7 @@ export class LikeService {
 
     if (findLike) {
       const removeLike = await this.likeEntity.remove(findLike);
-      return {removeLike,message:"unlike successfully"};
+      return { removeLike, message: 'unlike successfully' };
     }
 
     const createLike = this.likeEntity.create({
@@ -29,6 +29,6 @@ export class LikeService {
     });
 
     const addLike = await this.likeEntity.save(createLike);
-    return {addLike,message:"like successfully"}
+    return { addLike, message: 'like successfully' };
   }
 }

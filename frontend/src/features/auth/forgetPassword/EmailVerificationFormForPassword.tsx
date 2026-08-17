@@ -13,6 +13,7 @@ import {
   useLazyGetForgetOTPQuery,
   useVerifyOTPForgetPasswordMutation,
 } from "../services/forgetPassword.feature";
+import toast from "react-hot-toast";
 
 const EmailVerificationFormForPassword = () => {
   const [requestOTPForgetPassword, { isLoading: requestingOTP }] =

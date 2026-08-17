@@ -6,7 +6,7 @@ services:
     env_file:
       - .docker.env
     depends_on: 
-           - database
+      - database
 
   frontend:
     build: ./frontend
@@ -16,17 +16,16 @@ services:
       - backend
 
   database:
-    image: postgres:latest
+    image: postgres:latest  
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       POSTGRES_DB: insta
-      POSTGRES_PORT: 5431
-      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
       POSTGRES_PASSWORD: '12345'
       POSTGRES_USER: postgres
     volumes:
-         - insta-postgres-data:/var/lib/postgresql/data  
+         - insta-postgres-data:/var/lib/postgresql
    
 volumes: 
   insta-postgres-data:

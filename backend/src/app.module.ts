@@ -19,34 +19,35 @@ import { SaveModule } from './save/save.module';
 import { NotificationModule } from './notification/notification.module';
 import { ForgetPasswordModule } from './forget-password/forget-password.module';
 
-
 @Module({
-  imports: [UserModule,AuthModule,
-    ConfigModule.forRoot({isGlobal:true}),
-  TypeOrmModule.forRoot({
-    type:"postgres",
-    database:process.env.Database,
-    username:process.env.DbUserName,
-    port:5432,
-    host:process.env.DbHost,
-    password:process.env.DbPassword,
-    entities:[UserEntity],
-    autoLoadEntities:true,
-    synchronize:true
-
-  }),
-  PasswordModule,
-  MailModule,
-  PostModule,
-  CloudnaryModule,
-  FollowModule,
-  ChatModule,
-  CommentModule,
-  LikeModule,
-  SearchModule,
-  SaveModule,
-  NotificationModule,
-  ForgetPasswordModule],
+  imports: [
+    UserModule,
+    AuthModule,
+    ConfigModule.forRoot({ isGlobal: true }),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      database: process.env.DATABASE,
+      username: process.env.DB_USERNAME,
+      port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
+      host: process.env.DB_HOST ? process.env.DB_HOST : 'postgres',
+      password: process.env.DB_PASSWORD,
+      entities: [UserEntity],
+      autoLoadEntities: true,
+      synchronize: true,
+    }),
+    PasswordModule,
+    MailModule,
+    PostModule,
+    CloudnaryModule,
+    FollowModule,
+    ChatModule,
+    CommentModule,
+    LikeModule,
+    SearchModule,
+    SaveModule,
+    NotificationModule,
+    ForgetPasswordModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

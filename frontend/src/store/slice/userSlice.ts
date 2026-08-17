@@ -4,13 +4,14 @@ import type {  userProfileInterface } from "../../types/user.interface";
 const initialState: userProfileInterface = {
    userName:"",
       email:"",
-      profilePic: {url:"",public_id:""},
+      profilePic: {url:"",publicId:""},
       userId:"",
       bio:"",
       postCount:"",
       followerCount:"",
       followingCount:"",
       createdAt:"",
+       userPostData:[]
 };
 
 const userSlice = createSlice({
