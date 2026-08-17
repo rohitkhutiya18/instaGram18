@@ -1,9 +1,7 @@
 import {
-  Bell,
   Home,
   MessageCircle,
   Plus,
-  Search,
   User,
 } from "lucide-react";
 import { Link } from "react-router-dom";

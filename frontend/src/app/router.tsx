@@ -42,10 +42,14 @@ export const router = createBrowserRouter([
         ),
         path: "profile",
       },
-      { element: (<ProtectedRoutes>
-        <UpdatePost />
-      </ProtectedRoutes>
-      ), path: "update-post/:id" },
+      {
+        element: (
+          <ProtectedRoutes>
+            <UpdatePost />
+          </ProtectedRoutes>
+        ),
+        path: "update-post/:id",
+      },
       {
         element: (
           <ProtectedRoutes>
@@ -78,11 +82,11 @@ export const router = createBrowserRouter([
     element: <EmailVerification />,
   },
   {
-    path:"/verify-email-forget-password",
-    element:<EmailVerifyForPassword/>
+    path: "/verify-email-forget-password",
+    element: <EmailVerifyForPassword />,
   },
   {
-    path:'/forget-password',
-    element:<ForgetPasswordPage/>
-  }
+    path: "/forget-password",
+    element: <ForgetPasswordPage />,
+  },
 ]);

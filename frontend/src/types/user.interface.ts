@@ -28,13 +28,13 @@ export interface userProfileInterface {
   id?:string;
   userName: string;
   email: string;
-  profilePic: userProfileImageInterface | null;
+  profilePic?: userProfileImageInterface;
   userId: string;
   bio: string;
   postCount: string;
   followerCount: string;
   followingCount: string;
   createdAt: string;
-  userPostData:userProfilePostInterface[]
+  userPostData?:userProfilePostInterface[]
 }
 
