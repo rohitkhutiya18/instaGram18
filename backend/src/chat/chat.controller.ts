@@ -1,4 +1,4 @@
-  import { UseGuards, Injectable, Get } from '@nestjs/common';
+import { UseGuards, Injectable, Get } from '@nestjs/common';
 import { ChatService } from './chat.service';
 
 import {
@@ -89,10 +89,10 @@ export class ChatGateWay implements OnGatewayDisconnect {
 
     if (findSender) {
       this.server.to(findSender).emit('newMessage', message);
-    } 
+    }
 
-    if(!findRecever){
-       await this.notificationService.notifyMail(payload.reciverEmail);
+    if (!findRecever) {
+      await this.notificationService.notifyMail(payload.reciverEmail);
     }
 
     if (findRecever) {
