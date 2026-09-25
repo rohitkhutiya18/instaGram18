@@ -52,8 +52,10 @@ const ForgetPasswordPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br
-     from-[#fdf5f5] via-[#fbeaea] to-[#f8dede] px-4">
+    <div
+      className="min-h-screen flex items-center justify-center bg-gradient-to-br
+     from-[#fdf5f5] via-[#fbeaea] to-[#f8dede] px-4"
+    >
       <div
         className="w-full max-w-md rounded-3xl border border-white/60
         bg-white/40 backdrop-blur-xl shadow-2xl p-8"
@@ -98,7 +100,7 @@ const ForgetPasswordPage = () => {
 
           <Button
             type="submit"
-            children = {reseting ? "resting..." : "reset"}
+            children={reseting ? "resting..." : "reset"}
             className="w-full cursor-pointer py-3 font-semibold
             text-[#4f4444] transition hover:scale-[0.98] hover:shadow-lg"
           />

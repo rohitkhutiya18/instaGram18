@@ -36,10 +36,10 @@ const   EmailVerificationForm = () => {
          await requestOTP({email}).unwrap();
          toast.success("check your email")
         setShowOtpInputBox(true);
+        return;
       }
 
-      const res = await requestVerifyOTP(data).unwrap()
-         console.log(res);
+          await requestVerifyOTP(data).unwrap()
          navigate('/register',{state:{email:data.email}});
     } catch (error) {
       console.log("error in the emailverificiton form", handleGetOTP);
