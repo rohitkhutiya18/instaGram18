@@ -5,11 +5,8 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { randomInt } from 'crypto';
-import { Response } from 'express';
 import { PasswordService } from 'src/common/password/password.service';
 import { MailService } from 'src/mail/mail.service';
-import { UserEntity } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 
 @Injectable()

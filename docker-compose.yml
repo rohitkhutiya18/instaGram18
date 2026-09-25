@@ -1,31 +1,65 @@
-services:
-  backend:
-    build: ./backend
-    ports:
-      - "3000:3000"
-    env_file:
-      - .docker.env
-    depends_on: 
-      - database
+# services:
+#   backend:
+#     build: ./backend
+#     ports:
+#       - "3000:3000"
+#     env_file:
+#       - .docker.env
+#     depends_on: 
+#       - database
 
-  frontend:
-    build: ./frontend
-    ports:
-      - "5173:5173"
-    depends_on:
-      - backend
+#   frontend:
+#     build: ./frontend
+#     ports:
+#       - "5173:5173"
+#     depends_on:
+#       - backend
 
-  database:
-    image: postgres:latest  
-    ports:
-      - "5433:5432"
-    environment:
-      POSTGRES_DB: insta
-      POSTGRES_PORT: 5432
-      POSTGRES_PASSWORD: '12345'
-      POSTGRES_USER: postgres
-    volumes:
-         - insta-postgres-data:/var/lib/postgresql
+#   database:
+#     image: postgres:latest  
+#     ports:
+#       - "5433:5432"
+#     environment:
+#       POSTGRES_DB: insta
+#       POSTGRES_PORT: 5432
+#       POSTGRES_PASSWORD: '12345'
+#       POSTGRES_USER: postgres
+#     volumes:
+#          - insta-postgres-data:/var/lib/postgresql
    
-volumes: 
-  insta-postgres-data:
+# volumes: 
+#   insta-postgres-data:
+
+
+services:
+      backend: 
+        image: iamrohit10/instaclone-backend:latest
+        ports:
+          - "3000:3000"
+        env_file:
+          - .docker.env
+        depends_on: 
+          - database   
+
+      frontend:
+        image: iamrohit10/instaclone-frontend:latest
+        ports:
+          - "5173:5173"
+        depends_on: 
+          - backend  
+
+      database:
+        image: postgres:latest
+        ports:
+          - "5433:5432"
+          environment:
+            POSTGRES_DB: insta
+            POSTGRES_PORT: 5432
+            POSTGRES_PASSWORD: '12345'
+            POSTGRES_USER: postgres 
+          volumes:
+            - insta-postgres-data:/var/lib/postgresql
+
+  volumes:
+    insta-postgres-data:          
+   

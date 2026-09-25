@@ -1,4 +1,11 @@
-import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { createTransport } from 'nodemailer';
@@ -6,97 +13,181 @@ import { mailEntity } from './enitities/mail.entity';
 import { Repository } from 'typeorm';
 import { randomInt } from 'crypto';
 import { RegisteredUserEntity } from 'src/user/entities/RegisteredUser.entity';
+import { REDIS_CLIENT } from 'src/redis/redis.provider';
+import Redis from 'ioredis';
 
 @Injectable()
 export class MailService {
-    private transport;
+  private transport;
 
-    constructor(private readonly config : ConfigService,
-        @InjectRepository(mailEntity) private mailEntity :Repository<mailEntity>,
-          @InjectRepository(RegisteredUserEntity) private registeredUserEntity :Repository<RegisteredUserEntity>
-    ){
-        this.transport = createTransport({
-            service:"gmail",
-            auth:{
-                user:this.config.get('userMail'),
-                pass:this.config.get('userMailPassKey'),
-            }
-        })
+  constructor(
+    private readonly config: ConfigService,
+    @Inject(REDIS_CLIENT) readonly redis: Redis,
+    @InjectRepository(mailEntity) private mailEntity: Repository<mailEntity>,
+    @InjectRepository(RegisteredUserEntity)
+    private registeredUserEntity: Repository<RegisteredUserEntity>,
+  ) {
+    this.transport = createTransport({
+      service: 'gmail',
+      auth: {
+        user: this.config.get('userMail'),
+        pass: this.config.get('userMailPassKey'),
+      },
+    });
+  }
+
+  async sendMail(email: string, html: string, subject = 'OTP verification') {
+    try {
+      const info = await this.transport.sendMail({
+        from: `${this.config.get('userMail')}`,
+        to: email,
+        subject,
+        html: html,
+      });
+
+      return info;
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(`Email not send`);
+    }
+  }
+
+  //   async setOTP(email: string) {
+  //     const otp = randomInt(1000, 10000);
+
+  //     const existingOtp = await this.mailEntity.findOne({
+  //       where: { email: email },
+  //     });
+
+  //     if (existingOtp && existingOtp.expiresAt.getTime() < Date.now()) {
+  //       await this.mailEntity.delete(existingOtp);
+  //     }
+
+  //     const data = {
+  //       email,
+  //       otp,
+  //       expiresAt: new Date(Date.now() + 2 * 60 * 1000),
+  //     };
+
+  //     const addInDb = this.mailEntity.create(data);
+
+  //     await this.mailEntity.save(addInDb);
+
+  //     const html = `<p> your OTP </p> <h2>${otp}</h2>  <br></br>  <h3> valid for 5min </h3>`;
+  //     await this.sendMail(email, html);
+
+  //     return { message: 'otp send successfully', otp };
+  //   }
+
+  async setOTP(email: string) {
+    const otp = randomInt(1000, 10000);
+
+    const key = `user:${email}`;
+    const cached = await this.redis.get(key);
+
+    if (cached) {
+      throw new ConflictException('you already have valid otp');
     }
 
-    async sendMail(email:string,html:string,subject='OTP verification'){
-       try {
-        
-         const info = await this.transport.sendMail({
-             from : `${this.config.get('userMail')}`,
-             to:email,
-             subject,
-             html:html
-         })
- 
-         return info
-       } catch (error) {
-        console.log(error)
-        throw new InternalServerErrorException(`Email not send`);
-       }
+    // const existingOtp = await this.mailEntity.findOne({
+    //   where: { email: email },
+    // });
+
+    // if (existingOtp && existingOtp.expiresAt.getTime() < Date.now()) {
+    //   await this.mailEntity.delete(existingOtp);
+    // }
+
+    // const data = {
+    //   email,
+    //   otp,
+    //   expiresAt: new Date(Date.now() + 2 * 60 * 1000),
+    // };
+
+    // const addInDb = this.mailEntity.create(data);
+
+    // await this.mailEntity.save(addInDb);
+
+    await this.redis.set(key, otp, 'EX', 180);
+
+    const html = `<p> your OTP </p> <h2>${otp}</h2>  <br></br>  <h3> valid for 5min </h3>`;
+    await this.sendMail(email, html);
+
+    return { message: 'otp send successfully', otp };
+  }
+
+  //   async verifyOTP(email: string, otp: number) {
+  //     const findInRecords = await this.registeredUserEntity.findOne({
+  //       where: { email },
+  //     });
+
+  //     if (findInRecords) {
+  //       await this.registeredUserEntity.delete(findInRecords);
+  //     }
+
+  //     const record = await this.mailEntity.findOne({ where: { email } });
+
+  //     if (!record) {
+  //       throw new BadRequestException('email not found');
+  //     }
+
+  //     if (record.expiresAt.getTime() < Date.now()) {
+  //       await this.mailEntity.remove(record);
+  //       throw new UnauthorizedException('Otp expired');
+  //     }
+
+  //     if (otp != record?.otp) {
+  //       throw new UnauthorizedException('you entered wrong top');
+  //     }
+
+  //     const addEmailAtUserEntity = this.registeredUserEntity.create({
+  //       email: email,
+  //     });
+
+  //     await this.registeredUserEntity.save(addEmailAtUserEntity);
+
+  //     await this.mailEntity.remove(record);
+
+  //     return { mesage: 'email verify' };
+  //   }
+
+  async verifyOTP(email: string, otp: number) {
+    // const findInRecords = await this.registeredUserEntity.findOne({
+    //   where: { email },
+    // });
+
+    // if (findInRecords) {
+    //   await this.registeredUserEntity.delete(findInRecords);
+    // }
+
+    // const record = await this.mailEntity.findOne({ where: { email } });
+
+    const key = `user:${email}`;
+    const record = await this.redis.get(key);
+
+    console.log(record);
+    if (!record) {
+      throw new BadRequestException('email not found');
+    }
+    const recordTTL = await this.redis.ttl(key);
+    console.log(recordTTL);
+    if (recordTTL === -2) {
+      //   await this.mailEntity.remove(record);
+      throw new UnauthorizedException('Otp expired');
     }
 
-    async setOTP(email:string){
-    const otp = randomInt(1000,10000);
-
-    const existingOtp = await this.mailEntity.findOne({where:{email:email}});
-
-    if(existingOtp && existingOtp.expiresAt.getTime() < Date.now()){
-       await this.mailEntity.delete(existingOtp);
+    if (String(otp) !== record) {
+      throw new UnauthorizedException('you entered wrong top');
     }
 
-        const data = {
-            email,otp,expiresAt:new Date(Date.now() + 2 * 60 * 1000 )
-        }
-        
-       const addInDb = this.mailEntity.create(data);
+    const addEmailAtUserEntity = this.registeredUserEntity.create({
+      email: email,
+    });
 
-       await this.mailEntity.save(addInDb);
+    await this.registeredUserEntity.save(addEmailAtUserEntity);
+    await this.redis.del(key);
 
-       const html = `<p> your OTP </p> <h2>${otp}</h2>  <br></br>  <h3> valid for 5min </h3>`
-       await this.sendMail(email,html);
+    // await this.mailEntity.remove(record);
 
-       return {message:"otp send successfully",otp};
-    }
-
-    async verifyOTP(email:string,otp:number){
-
-        const findInRecords = await this.registeredUserEntity.findOne({where:{email}});
-
-        if(findInRecords){
-             await this.registeredUserEntity.delete(findInRecords)
-        }
-
-         const record = await this.mailEntity.findOne({where:{email}})
-
-         if(!record){
-            throw new BadRequestException("email not found");
-         }
-
-         if(record.expiresAt.getTime() < Date.now()){
-             await this.mailEntity.remove(record)
-             throw new UnauthorizedException("Otp expired");
-         }
-
-         if(otp != record?.otp){
-               throw new UnauthorizedException("you entered wrong top");
-         }
-  
-         const addEmailAtUserEntity = this.registeredUserEntity.create({
-            email:email
-         })
-
-         await this.registeredUserEntity.save(addEmailAtUserEntity);
-
-        await this.mailEntity.remove(record);
-
-         return {mesage:"email verify"};
-    }
-
-  
+    return { mesage: 'email verify' };
+  }
 }

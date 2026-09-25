@@ -45,8 +45,7 @@ export class ForgetPasswordService {
 
     const html = `
      <p>forget password OTP</p>
-     <p>${otp}</p>
-    `;
+     <p>${otp}</p>`;
     const subject = 'verify email for forget password';
     const expiresAt = new Date(Date.now() + 2 * 60 * 1000);
     try {

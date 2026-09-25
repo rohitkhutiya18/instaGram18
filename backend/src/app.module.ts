@@ -18,6 +18,7 @@ import { SearchModule } from './search/search.module';
 import { SaveModule } from './save/save.module';
 import { NotificationModule } from './notification/notification.module';
 import { ForgetPasswordModule } from './forget-password/forget-password.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { ForgetPasswordModule } from './forget-password/forget-password.module';
     SaveModule,
     NotificationModule,
     ForgetPasswordModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService],
